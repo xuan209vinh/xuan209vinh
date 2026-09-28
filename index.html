@@ -4,196 +4,387 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trái tim hoa hồng 🌹</title>
+<title>Đêm Mưa | Lofi Memories</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        background: radial-gradient(circle, #54152f, #180b1d);
-        color: white;
-        font-family: Arial, sans-serif;
-        text-align: center;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: "Segoe UI", sans-serif;
+  color: #e8eaf6;
+  background:
+    radial-gradient(ellipse at 50% 20%, #253450 0%, #10182a 45%, #060912 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 14px;
+}
 
-    h1 {
-        color: #ff9fbd;
-        text-shadow: 0 0 20px #ff2768;
-        margin-bottom: 12px;
-    }
+.scene {
+  width: min(850px, 100%);
+  text-align: center;
+}
 
-    p {
-        color: #ffdce7;
-        margin-bottom: 35px;
-    }
+h1 {
+  font-size: clamp(25px, 5vw, 38px);
+  font-weight: 400;
+  letter-spacing: 5px;
+  margin: 0 0 8px;
+  text-shadow: 0 0 25px #91baff88;
+}
 
-    #heart {
-        display: grid;
-        grid-template-columns: repeat(7, 48px);
-        gap: 2px;
-        cursor: pointer;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-        filter: drop-shadow(0 0 15px #ff174f);
-    }
+.subtitle {
+  color: #aab8d0;
+  font-size: 13px;
+  letter-spacing: 3px;
+  margin-bottom: 26px;
+}
 
-    .rose {
-        font-size: 40px;
-        line-height: 1.2;
-        display: inline-block;
-        transition:
-            transform 0.8s cubic-bezier(.2,.8,.3,1.3),
-            opacity 0.7s;
-        transform: translate(0, 0) rotate(0deg) scale(1);
-    }
+.window {
+  height: 310px;
+  position: relative;
+  overflow: hidden;
+  border: 8px solid #273247;
+  border-radius: 7px;
+  background: linear-gradient(#101a32, #29344e 70%, #111a2b);
+  box-shadow: 0 0 45px #000a, inset 0 0 30px #050a17;
+}
 
-    .rose.burst {
-        transform:
-            translate(var(--dx), var(--dy))
-            rotate(var(--rot))
-            scale(0.2);
-        opacity: 0;
-    }
+.moon {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  top: 32px;
+  right: 17%;
+  border-radius: 50%;
+  background: #e0e5ee;
+  box-shadow: 0 0 30px #dbe6ff77;
+}
 
-    .empty {
-        width: 48px;
-        height: 45px;
-    }
+.city {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 115px;
+  display: flex;
+  align-items: end;
+  justify-content: space-around;
+  gap: 5px;
+}
 
-    #message {
-        margin-top: 35px;
-        font-size: 18px;
-        color: #ffb4cb;
-        min-height: 28px;
-    }
+.building {
+  flex: 1;
+  max-width: 90px;
+  background: linear-gradient(90deg, #10192a, #202d46, #10192a);
+  border-top: 2px solid #34415c;
+  position: relative;
+}
 
-    .hint {
-        font-size: 13px;
-        color: #d6a6ba;
-        margin-top: 15px;
-    }
+.building:nth-child(1) { height: 60%; }
+.building:nth-child(2) { height: 90%; }
+.building:nth-child(3) { height: 72%; }
+.building:nth-child(4) { height: 100%; }
+.building:nth-child(5) { height: 65%; }
+.building:nth-child(6) { height: 82%; }
+.building:nth-child(7) { height: 52%; }
+
+.building::after {
+  content: "";
+  position: absolute;
+  inset: 10px 8px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0 12px,
+    #b4cfff44 12px 16px
+  );
+}
+
+.rain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    105deg,
+    transparent 0 18px,
+    #b9d9ff40 19px,
+    transparent 20px 38px
+  );
+  background-size: 100px 180px;
+  animation: rainfall 0.65s linear infinite;
+}
+
+@keyframes rainfall {
+  from { background-position: 0 0; }
+  to { background-position: -20px 180px; }
+}
+
+.lyrics-box {
+  min-height: 135px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 25px 12px;
+}
+
+#lyric {
+  font-size: clamp(17px, 3vw, 24px);
+  line-height: 1.8;
+  color: #f0f2ff;
+  text-shadow: 0 0 18px #91baff88;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 1s, transform 1s;
+}
+
+#lyric.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#status {
+  color: #9daec9;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+button {
+  border: 1px solid #526582;
+  background: #1b2940;
+  color: #edf2ff;
+  border-radius: 25px;
+  padding: 11px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #344763;
+  transform: translateY(-2px);
+}
+
+.note {
+  font-size: 12px;
+  color: #74839d;
+  margin-top: 22px;
+}
 </style>
 </head>
 
 <body>
+<main class="scene">
+  <h1>ĐÊM MƯA</h1>
+  <div class="subtitle">LOFI · MEMORIES · 02:17 AM</div>
 
-<h1>🌹 Trái tim hoa hồng 🌹</h1>
-<p>Một trái tim được ghép từ những bông hồng.</p>
+  <div class="window">
+    <div class="moon"></div>
+    <div class="city">
+      <div class="building"></div>
+      <div class="building"></div>
+      <div class="building"></div>
+      <div class="building"></div>
+      <div class="building"></div>
+      <div class="building"></div>
+      <div class="building"></div>
+    </div>
+    <div class="rain"></div>
+  </div>
 
-<div id="heart" role="button" tabindex="0"
-     aria-label="Bấm để làm trái tim hoa hồng tung tóe">
+  <div class="lyrics-box">
+    <div id="lyric">Một ngày của em trôi qua thế nào</div>
+    <div id="status">Đêm nay, hãy để âm nhạc kể chuyện...</div>
+  </div>
 
-    <span class="empty"></span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="empty"></span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="empty"></span>
+  <div class="controls">
+    <button id="playBtn">▶ Phát nhạc</button>
+    <button id="pauseBtn">Ⅱ Tạm dừng</button>
+    <button id="restartBtn">↻ Đọc lại</button>
+  </div>
 
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
+  <audio id="music" preload="metadata">
+    <source src="nhac.mp3" type="audio/mpeg">
+  </audio>
 
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-
-    <span class="empty"></span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="empty"></span>
-
-    <span class="empty"></span>
-    <span class="empty"></span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="rose">🌹</span>
-    <span class="empty"></span>
-    <span class="empty"></span>
-
-    <span class="empty"></span>
-    <span class="empty"></span>
-    <span class="empty"></span>
-    <span class="rose">🌹</span>
-    <span class="empty"></span>
-    <span class="empty"></span>
-    <span class="empty"></span>
-
-</div>
-
-<div id="message">Một trái tim dành cho những điều đẹp đẽ ❤️</div>
-<div class="hint">✨ Bấm vào trái tim để xem phép màu ✨</div>
+  <div class="note">
+    Put your headphones on · Listen to the rain · Remember
+  </div>
+</main>
 
 <script>
-    const heart = document.getElementById("heart");
-    const roses = document.querySelectorAll(".rose");
-    const message = document.getElementById("message");
+const lyrics = [
+  "Một ngày của em trôi qua thế nào",
+  "Còn hoài ngóng trông điều gì hay sao",
+  "Còn đợi chuyến xe mỗi lúc tan ca đi cùng nhau",
+  "Ta vẫn đi chung trên con đường nhưng mỗi đứa đi một phương",
 
-    let exploding = false;
+  "Dòng đời cứ trôi đã qua mấy mùa",
+  "Từng lời lúc xưa bỗng thành lời nói đùa",
+  "Thanh xuân ta đã gửi trao đến nhau liệu còn cạnh bên lúc mai sau",
+  "Có lẽ duyên số đã an bài",
+  "Em cứ đi đi đừng ngoảnh lại",
 
-    function explodeHeart() {
-        if (exploding) return;
-        exploding = true;
+  "Anh đã từ bỏ rồi đấy",
+  "Dù nuối tiếc cũng buông tay",
+  "Dù có cố gắng đến đâu đổi thay đến đâu",
+  "Hạnh phúc vẫn bỏ anh lại phía sau",
 
-        message.textContent = "🌹 Hoa hồng bay khắp nơi! 💖";
+  "Vạch đích vốn có một người không phải anh",
+  "Vậy thì mình chẳng cần phải thương hại nhau nữa em à",
+  "Anh chẳng sao đâu",
+  "Cuộc đời vốn ngắn sao cứ trách nhau hoài",
 
-        roses.forEach((rose) => {
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 100 + Math.random() * 250;
-            const dx = Math.cos(angle) * distance;
-            const dy = Math.sin(angle) * distance;
-            const rotation = Math.random() * 1000 - 500;
+  "Anh ước được cầm tay em đưa em lên thánh đường",
+  "Tặng em bó hoa tươi trong bộ váy cưới",
+  "Lòng muốn nói bao lời",
+  "Nhưng chẳng với tới anh đã từ bỏ thật rồi",
 
-            rose.style.setProperty("--dx", dx + "px");
-            rose.style.setProperty("--dy", dy + "px");
-            rose.style.setProperty("--rot", rotation + "deg");
+  "Anh đã buông bỏ hết những quá khứ của ngày xưa",
+  "Anh cũng chấp nhận những chuyện mình khóc dưới màn mưa",
+  "Anh từng hi vọng sẽ được cùng em dạo quanh ở trên con phố nhỏ",
+  "Sao giờ chỉ còn mình anh đứng giữa con đường cùng với câu hỏi đó",
 
-            rose.classList.add("burst");
-        });
+  "Tại sao em đi (tại sao em đi)",
+  "Không một lời từ biệt",
+  "Rằng anh đã biết hi vọng chờ đợi rồi phải chấp nhận tự tuyệt",
+  "Ai trong chúng ta đều phải tiếc nuối",
+  "Đó lại chính là kỉ niệm",
+  "Và chọn buông tay là điều cuối cùng anh xem đó là điều hiển nhiên",
 
-        setTimeout(() => {
-            roses.forEach((rose) => {
-                rose.classList.remove("burst");
-            });
+  "Chúng ta sẽ khóc (chúng ta sẽ khóc)",
+  "Vì những thứ làm ta cười",
+  "Rồi ta sẽ yêu (rồi ta sẽ yêu)",
+  "Như một đứa nhóc mới lên mười",
+  "Từ lần cuối ta tâm sự với nhau về những câu chuyện buồn vui",
+  "Sao giờ chỉ còn mình anh ở lại cùng với dằn vặt day dứt không nguôi anh vẫn còn nhớ",
 
-            message.textContent = "❤️ Trái tim đã trở về! Bấm tiếp nhé.";
+  "Anh đã từ bỏ rồi đấy",
+  "Dù nuối tiếc cũng buông tay",
+  "Dù có cố gắng đến đâu đổi thay đến đâu",
+  "Hạnh phúc vẫn bỏ anh lại phía sau",
+  "Rồi sẽ có thôi một người thay thế anh",
+  "Nắm tay người cùng người bước qua ngày giông bão",
+  "Em à anh chọn buông tay",
+  "Một hạnh phúc ngắn ta chẳng thể giữ lại",
 
-            setTimeout(() => {
-                exploding = false;
-            }, 900);
-        }, 1500);
+  "Ta chẳng thể cạnh bên nhau thương nhau đến hết đời",
+  "Rồi ta sẽ quên thôi tìm hạnh phúc mới",
+  "Thời gian cứ dần trôi",
+  "Phải hạnh phúc nhé anh sẽ từ bỏ được thôi",
+
+  "Ta chẳng còn yêu ta chẳng còn thương ta chẳng còn nhắc về hồi đó",
+  "Ta từng đánh đổi ta từng bên cạnh dù là ngược giông hay ngược gió",
+  "Từ ngày em đi nỗi buồn không tên đã dường như đã đến và gõ cửa",
+  "Và chính lúc đó điếu thuốc trên môi của anh bỗng chốc đã đỏ lửa",
+
+  "Tiếng đàn guitar vẫn là nó nhưng lại chỉ còn thân xác",
+  "Những đoạn hợp âm vui đã chấm dứt tiết tấu chuyển sang một trang khác",
+  "Có những giai điệu hoà cùng lời ca anh trót viết nên một bản nhạc",
+  "Giai điệu lời ca cũng đã kết thúc hi vọng ta nhớ đến nhau"
+];
+
+const music = document.getElementById("music");
+const lyric = document.getElementById("lyric");
+const status = document.getElementById("status");
+
+let current = 0;
+let timer = null;
+
+function showLyric(index) {
+  lyric.classList.remove("show");
+
+  setTimeout(() => {
+    lyric.textContent = lyrics[index];
+    lyric.classList.add("show");
+  }, 250);
+}
+
+function stopLyrics() {
+  if (timer) {
+    clearTimeout(timer);
+    timer = null;
+  }
+}
+
+function nextLyric() {
+  if (current >= lyrics.length) {
+    stopLyrics();
+    status.textContent = "Kết thúc câu chuyện của đêm nay 🌙";
+    return;
+  }
+
+  showLyric(current);
+
+  // Câu dài được giữ lâu hơn câu ngắn.
+  const duration = Math.max(
+    2800,
+    Math.min(6500, lyrics[current].length * 75)
+  );
+
+  current++;
+  timer = setTimeout(nextLyric, duration);
+}
+
+function startLyrics() {
+  stopLyrics();
+  current = 0;
+  status.textContent = "Đang phát nhạc · Hãy tận hưởng đêm mưa";
+  nextLyric();
+}
+
+document.getElementById("playBtn").addEventListener("click", async () => {
+  try {
+    await music.play();
+
+    if (timer === null) {
+      startLyrics();
     }
 
-    heart.addEventListener("click", explodeHeart);
+    status.textContent = "Đang phát nhạc · Hãy tận hưởng đêm mưa";
+  } catch (error) {
+    status.textContent = "Không phát được nhạc. Kiểm tra file nhac.mp3 nhé!";
+  }
+});
 
-    heart.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            explodeHeart();
-        }
-    });
+document.getElementById("pauseBtn").addEventListener("click", () => {
+  music.pause();
+  stopLyrics();
+  status.textContent = "Đã tạm dừng";
+});
+
+document.getElementById("restartBtn").addEventListener("click", async () => {
+  stopLyrics();
+  current = 0;
+  music.currentTime = 0;
+
+  try {
+    await music.play();
+    startLyrics();
+  } catch (error) {
+    showLyric(0);
+    status.textContent = "Kiểm tra file nhac.mp3 để phát nhạc nhé!";
+  }
+});
+
+music.addEventListener("ended", () => {
+  stopLyrics();
+  status.textContent = "Bản nhạc đã kết thúc 🌙";
+});
+
+showLyric(0);
+lyric.classList.add("show");
 </script>
-
 </body>
 </html>
