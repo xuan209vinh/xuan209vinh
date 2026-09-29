@@ -3,333 +3,297 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rainy Night - Lofi</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vinh Chat</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  padding: 25px 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-x: hidden;
-  color: #e9efff;
-  font-family: "Segoe UI", sans-serif;
-  background: radial-gradient(ellipse at 50% 10%,
-    #273752, #10182a 55%, #060912);
-}
-
-.scene {
-  width: min(850px, 100%);
-  text-align: center;
-}
-
-h1 {
-  font-size: clamp(27px, 5vw, 40px);
-  letter-spacing: 7px;
-  font-weight: 400;
-  margin: 0 0 8px;
-  text-shadow: 0 0 25px #a4c8ff88;
-}
-
-.subtitle {
-  color: #a7b8d4;
-  letter-spacing: 4px;
-  font-size: 12px;
-  margin-bottom: 26px;
-}
-
-/* Cửa sổ */
-.window {
-  height: 310px;
-  position: relative;
-  overflow: hidden;
-  border: 8px solid #273247;
-  border-radius: 7px;
-  background: linear-gradient(#101a32, #29344e 75%, #111a2b);
-  box-shadow: 0 0 45px #000a, inset 0 0 30px #050a17;
-}
-
-.moon {
-  position: absolute;
-  width: 53px;
-  height: 53px;
-  top: 32px;
-  right: 17%;
-  border-radius: 50%;
-  background: #e1e8f7;
-  box-shadow: 0 0 35px #dbe6ff88;
-}
-
-.city {
-  position: absolute;
-  bottom: 0;
-  height: 120px;
-  width: 100%;
-  display: flex;
-  align-items: end;
-  justify-content: space-around;
-  gap: 5px;
-}
-
-.building {
-  flex: 1;
-  max-width: 90px;
-  position: relative;
-  background: linear-gradient(90deg, #10192a, #202d46, #10192a);
-  border-top: 2px solid #34415c;
-}
-
-.building:nth-child(1) { height: 60%; }
-.building:nth-child(2) { height: 90%; }
-.building:nth-child(3) { height: 72%; }
-.building:nth-child(4) { height: 100%; }
-.building:nth-child(5) { height: 65%; }
-.building:nth-child(6) { height: 82%; }
-.building:nth-child(7) { height: 52%; }
-
-.building::after {
-  content: "";
-  position: absolute;
-  inset: 10px 8px;
-  background: repeating-linear-gradient(
-    0deg, transparent 0 12px, #b4cfff44 12px 16px
-  );
-}
-
-/* Mưa */
-.rain {
-  position: absolute;
-  inset: -100px 0 0;
-  pointer-events: none;
-  background-image: repeating-linear-gradient(
-    105deg, transparent 0 18px, #b9d9ff40 19px,
-    transparent 20px 38px
-  );
-  background-size: 100px 180px;
-  animation: rainfall .65s linear infinite;
-}
-
-@keyframes rainfall {
-  to { background-position: -20px 180px; }
-}
-
-/* Hạt sáng bay */
-.particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.particle {
-  position: absolute;
-  bottom: -15px;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #c8ddff;
-  box-shadow: 0 0 10px #9fcaff;
-  opacity: 0;
-  animation: floatUp linear infinite;
-}
-
-@keyframes floatUp {
-  0% {
-    transform: translateY(0) translateX(0);
-    opacity: 0;
-  }
-  20% { opacity: .8; }
-  80% { opacity: .5; }
-  100% {
-    transform: translateY(-340px) translateX(35px);
-    opacity: 0;
-  }
-}
-
-/* Thanh sóng âm thanh */
-.visualizer {
-  height: 150px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding: 15px 5px 5px;
-  overflow: hidden;
-}
-
-.bar {
-  width: 5px;
-  height: 8px;
-  border-radius: 10px;
-  background: linear-gradient(to top, #657fe8, #b9d9ff);
-  box-shadow: 0 0 10px #83aaff55;
-  animation: equalize .8s ease-in-out infinite alternate;
-  animation-play-state: paused;
-}
-
-@keyframes equalize {
-  0% { height: 8px; opacity: .55; }
-  25% { height: 30px; }
-  50% { height: 65px; opacity: 1; }
-  75% { height: 22px; }
-  100% { height: 95px; opacity: .8; }
-}
-
-.visualizer.playing .bar {
-  animation-play-state: running;
-}
-
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 5px;
-}
-
-button {
-  border: 1px solid #526582;
-  background: #1b2940;
-  color: #edf2ff;
-  border-radius: 25px;
-  padding: 11px 20px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: .2s;
-}
-
-button:hover {
-  background: #344763;
-  transform: translateY(-2px);
-}
-
-#status {
-  color: #9daec9;
-  font-size: 12px;
-  margin-top: 17px;
-}
-
-.footer {
-  color: #74839d;
-  font-size: 11px;
-  letter-spacing: 2px;
-  margin-top: 25px;
-}
-
-@media (max-width: 500px) {
-  .window { height: 250px; }
-  .visualizer { gap: 3px; height: 125px; }
-  .bar { width: 3px; }
+*{box-sizing:border-box}
+body{margin:0;background:#10131c;color:#edf0fa;font-family:Arial,sans-serif}
+button,input{font:inherit}
+button{cursor:pointer;border:0;border-radius:9px;padding:10px 14px;background:#8174ff;color:white}
+input{width:100%;padding:12px;margin:6px 0;background:#202535;border:1px solid #363d50;border-radius:9px;color:white}
+.card{max-width:420px;margin:8vh auto;padding:25px;background:#191e2b;border:1px solid #30364a;border-radius:16px}
+.app{display:none;max-width:1100px;height:90vh;min-height:500px;margin:5vh auto;background:#191e2b;border:1px solid #30364a;border-radius:16px;overflow:hidden}
+.sidebar{width:300px;flex-shrink:0;padding:16px;border-right:1px solid #30364a;overflow:auto}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.row{display:flex;gap:8px;align-items:center}
+.item{padding:12px;margin:5px 0;background:#222839;border-radius:9px;cursor:pointer;overflow-wrap:anywhere}
+.item:hover{background:#30384d}
+#messages{flex:1;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:10px}
+.msg{padding:10px 13px;border-radius:12px;background:#2a3042;max-width:80%;overflow-wrap:anywhere;white-space:pre-wrap}
+.mine{align-self:flex-end;background:#6255d9}
+#chatForm{display:flex;gap:8px;padding:12px;border-top:1px solid #30364a}
+#chatForm input{margin:0}
+.muted{color:#a8b0c6;font-size:13px}
+h2{margin-top:0}
+@media(max-width:650px){
+ .app{height:95vh;margin:2.5vh 8px}
+ .sidebar{width:38%;padding:9px}
+ .main{font-size:14px}
+ .card{margin:5vh 12px}
+ button{padding:9px}
 }
 </style>
 </head>
-
 <body>
-<main class="scene">
-  <h1>RAINY NIGHT</h1>
-  <div class="subtitle">LOFI · RAIN · MEMORIES</div>
-
-  <div class="window">
-    <div class="moon"></div>
-
-    <div class="city">
-      <div class="building"></div>
-      <div class="building"></div>
-      <div class="building"></div>
-      <div class="building"></div>
-      <div class="building"></div>
-      <div class="building"></div>
-      <div class="building"></div>
-    </div>
-
-    <div class="rain"></div>
-    <div class="particles" id="particles"></div>
+<section class="card" id="auth">
+  <h2>💬 Vinh Chat</h2>
+  <p class="muted">Trò chuyện riêng tư với bạn bè</p>
+  <input id="email" type="email" placeholder="Email của bạn" autocomplete="email">
+  <input id="password" type="password" placeholder="Mật khẩu (ít nhất 8 ký tự)" autocomplete="current-password">
+  <input id="displayName" placeholder="Tên hiển thị (khi đăng ký)">
+  <div class="row">
+    <button id="signup">Đăng ký</button>
+    <button id="login">Đăng nhập</button>
   </div>
+  <p class="muted" id="authStatus" role="status"></p>
+</section>
 
-  <div class="visualizer" id="visualizer"></div>
-
-  <div class="controls">
-    <button id="playBtn">▶ Phát nhạc</button>
-    <button id="pauseBtn">Ⅱ Tạm dừng</button>
-    <button id="restartBtn">↻ Phát lại</button>
-  </div>
-
-  <div id="status">Một chút bình yên giữa đêm mưa 🌙</div>
-
-  <audio id="music" preload="metadata">
-    <source src="nhac.mp3" type="audio/mpeg">
-  </audio>
-
-  <div class="footer">PUT YOUR HEADPHONES ON · RELAX</div>
-</main>
+<section class="app" id="app">
+  <aside class="sidebar">
+    <h2>💬 Vinh Chat</h2>
+    <p id="myName" class="muted"></p>
+    <button id="logout">Đăng xuất</button>
+    <hr style="border-color:#30364a;margin:18px 0">
+    <h3>Tìm người dùng</h3>
+    <input id="search" placeholder="Nhập username...">
+    <div id="users"></div>
+    <hr style="border-color:#30364a;margin:18px 0">
+    <h3>Cuộc trò chuyện</h3>
+    <div id="conversations"></div>
+  </aside>
+  <main class="main">
+    <header style="padding:17px;border-bottom:1px solid #30364a">
+      <strong id="chatTitle">Chọn một người để bắt đầu</strong>
+      <div id="chatStatus" class="muted"></div>
+    </header>
+    <div id="messages"></div>
+    <form id="chatForm">
+      <input id="messageInput" placeholder="Nhập tin nhắn..." maxlength="4000" autocomplete="off" disabled>
+      <button id="send" disabled>Gửi</button>
+    </form>
+  </main>
+</section>
 
 <script>
-const music = document.getElementById("music");
-const visualizer = document.getElementById("visualizer");
-const status = document.getElementById("status");
+const SUPABASE_URL = "https://ffrnjhvablgvangqyikx.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_ro2LHlA1_YQY2rIC63Nyzw_V_Xitm5m";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Tạo 45 thanh sóng âm
-for (let i = 0; i < 45; i++) {
-  const bar = document.createElement("div");
-  bar.className = "bar";
+const $ = id => document.getElementById(id);
+let user = null;
+let currentConversation = null;
+let currentChannel = null;
+let searchTimer = null;
 
-  // Mỗi thanh chạy lệch thời gian để tạo cảm giác tự nhiên
-  bar.style.animationDuration = (0.35 + Math.random() * 0.8) + "s";
-  bar.style.animationDelay = (Math.random() * 0.7) + "s";
-
-  visualizer.appendChild(bar);
+function status(text){ $("authStatus").textContent = text; }
+function escapeHTML(s){
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
+}
+function showApp(show){
+  $("auth").style.display = show ? "none" : "block";
+  $("app").style.display = show ? "flex" : "none";
+}
+async function getProfile(id){
+  const {data,error} = await db.from("profiles")
+    .select("id,username,display_name").eq("id",id).maybeSingle();
+  if(error) throw error;
+  return data;
 }
 
-// Tạo những hạt sáng bay trong cửa sổ
-const particles = document.getElementById("particles");
+$("signup").onclick = async () => {
+  const email = $("email").value.trim();
+  const password = $("password").value;
+  const displayName = $("displayName").value.trim();
+  if(!email || password.length < 8){
+    status("Nhập email hợp lệ và mật khẩu ít nhất 8 ký tự.");
+    return;
+  }
+  status("Đang tạo tài khoản...");
+  const {data,error} = await db.auth.signUp({
+    email,password,options:{data:{display_name:displayName}}
+  });
+  if(error){status(error.message);return;}
+  if(data.session){
+    status("Đăng ký thành công!");
+  }else{
+    status("Kiểm tra email để xác nhận tài khoản, rồi đăng nhập.");
+  }
+};
 
-for (let i = 0; i < 28; i++) {
-  const particle = document.createElement("div");
-  particle.className = "particle";
-  particle.style.left = Math.random() * 100 + "%";
-  particle.style.animationDuration = (5 + Math.random() * 9) + "s";
-  particle.style.animationDelay = (Math.random() * 8) + "s";
-  particle.style.width = (2 + Math.random() * 3) + "px";
-  particle.style.height = particle.style.width;
-  particles.appendChild(particle);
+$("login").onclick = async () => {
+  status("Đang đăng nhập...");
+  const {error} = await db.auth.signInWithPassword({
+    email:$("email").value.trim(),
+    password:$("password").value
+  });
+  if(error) status(error.message);
+};
+
+$("logout").onclick = async () => {
+  await db.auth.signOut();
+};
+
+async function initialize(){
+  const {data:{user:loggedInUser}} = await db.auth.getUser();
+  user = loggedInUser;
+  if(!user){
+    showApp(false);
+    return;
+  }
+  showApp(true);
+  try{
+    const p = await getProfile(user.id);
+    $("myName").textContent = p ? "@"+p.username : "Tài khoản";
+  }catch(e){
+    $("myName").textContent = "Tài khoản";
+  }
+  currentConversation = null;
+  $("chatTitle").textContent = "Chọn một người để bắt đầu";
+  $("chatStatus").textContent = "";
+  $("messages").replaceChildren();
+  $("messageInput").disabled = true;
+  $("send").disabled = true;
+  if(currentChannel){
+    await db.removeChannel(currentChannel);
+    currentChannel = null;
+  }
+  await loadConversations();
 }
 
-document.getElementById("playBtn").addEventListener("click", async () => {
-  try {
-    await music.play();
-    visualizer.classList.add("playing");
-    status.textContent = "Đang phát nhạc · Hãy thư giãn 🎧";
-  } catch (error) {
-    status.textContent = "Không phát được nhạc. Kiểm tra file nhac.mp3 nhé!";
+db.auth.onAuthStateChange((event,session) => {
+  user = session?.user ?? null;
+  if(event === "SIGNED_IN" || event === "SIGNED_OUT" ||
+     event === "INITIAL_SESSION"){
+    setTimeout(initialize,0);
   }
 });
 
-document.getElementById("pauseBtn").addEventListener("click", () => {
-  music.pause();
-  visualizer.classList.remove("playing");
-  status.textContent = "Tạm dừng một chút 🌙";
-});
-
-document.getElementById("restartBtn").addEventListener("click", async () => {
-  try {
-    music.currentTime = 0;
-    await music.play();
-    visualizer.classList.add("playing");
-    status.textContent = "Bắt đầu lại từ đầu 🎧";
-  } catch (error) {
-    status.textContent = "Kiểm tra file nhac.mp3 nhé!";
+async function searchUsers(){
+  if(!user) return;
+  const q = $("search").value.trim();
+  $("users").replaceChildren();
+  if(q.length < 2) return;
+  const {data,error} = await db.from("profiles")
+    .select("id,username,display_name")
+    .ilike("username","%"+q.replace(/[%_,()]/g,"")+"%")
+    .neq("id",user.id).limit(10);
+  if(error){$("chatStatus").textContent=error.message;return;}
+  for(const p of (data || [])){
+    const el = document.createElement("div");
+    el.className = "item";
+    el.innerHTML = "<strong>"+escapeHTML(p.display_name || p.username)+
+      "</strong><div class='muted'>@"+escapeHTML(p.username)+"</div>";
+    el.onclick = () => startConversation(p.id,p.username);
+    $("users").appendChild(el);
   }
+}
+$("search").addEventListener("input",()=>{
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(searchUsers,300);
 });
 
-music.addEventListener("ended", () => {
-  visualizer.classList.remove("playing");
-  status.textContent = "Bản nhạc đã kết thúc 🌙";
+async function startConversation(otherId,username){
+  $("chatStatus").textContent = "Đang mở cuộc trò chuyện...";
+  const {data,error} = await db.rpc("create_direct_conversation",{
+    other_user:otherId
+  });
+  if(error){
+    $("chatStatus").textContent = "Không thể mở chat: "+error.message;
+    return;
+  }
+  await loadConversations();
+  await openConversation(data,username);
+}
+
+async function loadConversations(){
+  if(!user) return;
+  const {data,error} = await db.from("conversations")
+    .select("id,user1_id,user2_id,created_at")
+    .or("user1_id.eq."+user.id+",user2_id.eq."+user.id)
+    .order("created_at",{ascending:false});
+  if(error){
+    $("chatStatus").textContent = "Lỗi tải cuộc trò chuyện: "+error.message;
+    return;
+  }
+  $("conversations").replaceChildren();
+  for(const c of (data || [])){
+    const otherId = c.user1_id === user.id ? c.user2_id : c.user1_id;
+    const p = await getProfile(otherId);
+    const name = p?.username || "Người dùng";
+    const el = document.createElement("div");
+    el.className = "item";
+    el.textContent = "@"+name;
+    el.onclick = () => openConversation(c.id,name);
+    $("conversations").appendChild(el);
+  }
+}
+
+async function openConversation(id,username){
+  if(currentChannel){
+    await db.removeChannel(currentChannel);
+    currentChannel = null;
+  }
+  currentConversation = id;
+  $("chatTitle").textContent = "@"+username;
+  $("chatStatus").textContent = "Tin nhắn riêng";
+  $("messageInput").disabled = false;
+  $("send").disabled = false;
+  await loadMessages();
+
+  currentChannel = db.channel("messages-"+id)
+    .on("postgres_changes",{
+      event:"INSERT",schema:"public",table:"messages",
+      filter:"conversation_id=eq."+id
+    },payload=>{
+      if(currentConversation === id) appendMessage(payload.new);
+    }).subscribe();
+}
+
+function appendMessage(m){
+  if($("messages").querySelector('[data-id="'+m.id+'"]')) return;
+  const el = document.createElement("div");
+  el.className = "msg"+(m.sender_id === user.id ? " mine" : "");
+  el.dataset.id = m.id;
+  el.textContent = m.content;
+  $("messages").appendChild(el);
+  $("messages").scrollTop = $("messages").scrollHeight;
+}
+
+async function loadMessages(){
+  $("messages").replaceChildren();
+  const {data,error} = await db.from("messages")
+    .select("id,sender_id,content,created_at")
+    .eq("conversation_id",currentConversation)
+    .order("created_at",{ascending:true}).limit(200);
+  if(error){
+    $("chatStatus").textContent = "Lỗi tải tin nhắn: "+error.message;
+    return;
+  }
+  for(const m of (data || [])) appendMessage(m);
+}
+
+$("chatForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const content = $("messageInput").value.trim();
+  if(!content || !currentConversation || !user) return;
+  $("send").disabled = true;
+  const {error} = await db.from("messages").insert({
+    conversation_id:currentConversation,
+    sender_id:user.id,
+    content
+  });
+  $("send").disabled = false;
+  if(error){
+    $("chatStatus").textContent = "Gửi thất bại: "+error.message;
+    return;
+  }
+  $("messageInput").value = "";
 });
+
+initialize();
 </script>
 </body>
 </html>
